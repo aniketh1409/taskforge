@@ -33,7 +33,7 @@ def create_job(request: RequestModel):
     return ResponseModel(
         job_id = uuid4(), 
         status = JOB_STATUS_QUEUED,
-        task_type = TASK_TYPE_DEMO_SLEEP_ECHO
+        task_type = request.task_type,
         payload = request.payload
         )
         
