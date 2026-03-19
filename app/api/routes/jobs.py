@@ -1,5 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from app.core.constants import JOB_STATUS_SUCCEEDED, JOB_STATUS_RUNNING, JOB_STATUS_FAILED, JOB_STATUS_QUEUED, TASK_TYPE_DEMO_SLEEP_ECHO
+from app.core.constants import (JOB_STATUS_SUCCEEDED, 
+                                JOB_STATUS_RUNNING, 
+                                JOB_STATUS_FAILED, 
+                                JOB_STATUS_QUEUED, 
+                                TASK_TYPE_DEMO_SLEEP_ECHO)
 from pydantic import BaseModel
 from uuid import UUID, uuid4
 
@@ -51,6 +55,6 @@ def retrieve_job(job_id: UUID):
         raise HTTPException(status_code = 404, detail = "Job not found")
     return job
 
-@router.get("/jobs", response_model = list[ResponseModel])
+@router.get("/jobs", response_model = list[ResponseModel]) #type hint to define a rule which means that ResponseModel must be of type list!
 def retrieve_all_jobs():
     return jobs_store.values()
