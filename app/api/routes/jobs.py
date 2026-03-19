@@ -4,8 +4,8 @@ from app.core.constants import (JOB_STATUS_SUCCEEDED,
                                 JOB_STATUS_FAILED, 
                                 JOB_STATUS_QUEUED, 
                                 TASK_TYPE_DEMO_SLEEP_ECHO)
-from pydantic import BaseModel
 from uuid import UUID, uuid4
+from app.api.schemas.jobs import RequestModel, ResponseModel
 
 
 router = APIRouter()
@@ -24,16 +24,6 @@ def display_status_list():
             "Running": JOB_STATUS_RUNNING,
             "Queued": JOB_STATUS_QUEUED}
 
-class RequestModel(BaseModel):
-    task_type: str = TASK_TYPE_DEMO_SLEEP_ECHO
-    payload: dict
-
-class ResponseModel(BaseModel):
-    job_id: UUID
-    status: str 
-    task_type: str 
-    payload: dict
-
 
 @router.post("/jobs", response_model = ResponseModel)
 def create_job(request: RequestModel):
@@ -48,7 +38,7 @@ def create_job(request: RequestModel):
 
     return new_job
 
-@router.get("/jobs/{job_id}")
+@router.get("/jobs/{job_id}", response_model = ResponseModel)
 def retrieve_job(job_id: UUID):
     job = jobs_store.get(str(job_id))
     if job is None:
@@ -57,4 +47,4 @@ def retrieve_job(job_id: UUID):
 
 @router.get("/jobs", response_model = list[ResponseModel]) #type hint to define a rule which means that ResponseModel must be of type list!
 def retrieve_all_jobs():
-    return jobs_store.values()
+    return list(jobs_store.values())
