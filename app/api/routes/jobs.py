@@ -31,7 +31,10 @@ def create_job(request: RequestModel, db : Session = Depends(get_db)):
     job = Job(id = str(generate_uuid), 
               status = JOB_STATUS_QUEUED, 
               task_type = request.task_type, 
-              payload = request.payload)
+              payload = request.payload,
+              result = None,
+              error = None,
+              )
     db.add(job)
     db.commit()
     db.refresh(job)
@@ -40,7 +43,9 @@ def create_job(request: RequestModel, db : Session = Depends(get_db)):
         job_id = UUID(job.id), 
         status = job.status,
         task_type = job.task_type,
-        payload = job.payload
+        payload = job.payload,
+        result = job.result,
+        error = job.error,
         )
 
     return new_job
@@ -55,8 +60,11 @@ def retrieve_job(job_id: UUID, db: Session = Depends(get_db)):
         job_id = UUID(job.id), 
         status = job.status,
         task_type = job.task_type,
-        payload = job.payload
+        payload = job.payload,
+        result = job.result,
+        error = job.error,
         )
+        
 
 @router.get("/jobs", response_model = list[ResponseModel]) #type hint to define a rule which means that ResponseModel must be of type list!
 def retrieve_all_jobs(db : Session = Depends(get_db)):
@@ -67,7 +75,9 @@ def retrieve_all_jobs(db : Session = Depends(get_db)):
         job_id = UUID(job.id), 
         status = job.status,
         task_type = job.task_type,
-        payload = job.payload
+        payload = job.payload,
+        result = job.result,
+        error = job.error,
         )
         for job in jobs
     ]

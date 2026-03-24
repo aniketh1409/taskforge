@@ -12,3 +12,5 @@ class ResponseModel(BaseModel):
     status: str 
     task_type: str 
     payload: dict
+    result: dict | None = None
+    error: str | None = None

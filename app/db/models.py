@@ -7,3 +7,5 @@ class Job(Base):
     status = Column(String)
     task_type = Column(String)
     payload = Column(JSON)
+    result = Column(JSON)
+    error = Column(String)
