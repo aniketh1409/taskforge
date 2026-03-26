@@ -8,4 +8,4 @@ class Settings:
         self.DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg://postgres:postgres@localhost:5432/taskforge")
         self.REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
 
-settings = Settings()
+settings = Settings() #instantiating
