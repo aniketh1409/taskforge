@@ -9,6 +9,7 @@ from app.api.schemas.jobs import RequestModel, ResponseModel
 from app.db.session import get_db
 from app.db.models import Job
 from sqlalchemy.orm import Session
+from app.queue.redis_client import enqueue_job
 
 
 router = APIRouter()
@@ -38,6 +39,7 @@ def create_job(request: RequestModel, db : Session = Depends(get_db)):
     db.add(job)
     db.commit()
     db.refresh(job)
+    enqueue_job(job.id)
 
     new_job = ResponseModel(
         job_id = UUID(job.id), 
