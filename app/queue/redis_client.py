@@ -12,3 +12,12 @@ created a redis client object using configured url, similar to how we did engine
 
 def enqueue_job(job_id: str) -> None:
     redis_client.rpush(JOB_QUEUE_NAME, job_id)
+
+def dequeue_job() -> str | None:
+    item = redis_client.blpop(JOB_QUEUE_NAME, timeout = 5) #b -> blocking; if queue is empty worker waits (no hammering in a tight loop)
+
+    if item is None:
+        return None
+    
+    _, job_id = item #_ is a throwaway variable, here we are unpacking the tuple!
+    return job_id
