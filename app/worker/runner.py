@@ -14,10 +14,11 @@ def process_job(job_id: str) -> None:
         db.refresh(job)
 
         try:
-            job.result = {
-                "Message" : "Working fine!",
-                "Author" : "Aniketh"
+            result = {
+                "message" : job.payload.get("message"),
+                "processed" : True
             }
+            job.result = result
             job.error = None
             job.status = JOB_STATUS_SUCCEEDED
             db.commit()
