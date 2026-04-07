@@ -15,13 +15,12 @@ app.include_router(router)
 #creates those tables inside postgres that sqlalchemy knows about, will only know if model module is imported
 Base.metadata.create_all(bind = engine)
 
-def main(): #main always runs (pulls from queue and processes using worker's process job)
-    while 1:
+def main() -> None: #main always runs (pulls from queue and processes using worker's process job)
+    while True:
         job_id = dequeue_job()
         if job_id is None:
             continue
-        else:
-            process_job(job_id)
+        process_job(job_id)
             
 if __name__ == "__main__":
     main()
