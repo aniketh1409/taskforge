@@ -23,8 +23,8 @@ def process_job(job_id: str) -> None:
 
             if delay_seconds > 0:
                 time.sleep(delay_seconds)
-            if should_fail is True:
-                raise ValueError(payload)
+            if should_fail:
+                raise ValueError("Forced Failure Request")
             else:
                 result = {
                     "message" : message,
